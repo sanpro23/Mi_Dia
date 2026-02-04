@@ -1,0 +1,15 @@
+/*titulo principal*/
+.mi-app h1 {
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: blue;
+    border-radius: 8px;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+/* Estilos para el navbar */
