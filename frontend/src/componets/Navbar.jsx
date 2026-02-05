@@ -1,6 +1,4 @@
-
 import { Link } from "react-router-dom";
-
 
 const Navbar = () => {
   return (
@@ -10,9 +8,9 @@ const Navbar = () => {
           <img src="/ImagenPegada.png" alt="Descripción de la imagen" />
         </div>
         <ul className="nav-menu">
-           <li className="navbar-item">
+          <li className="navbar-item">
             <Link to="/" className="navbar-link">
-              Inicio
+              INICIO
             </Link>
           </li>
           <li className="navbar-item">
