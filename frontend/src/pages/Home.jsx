@@ -1,12 +1,21 @@
-
-
 function Inicio() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      <p>This is the main landing page of our application.</p>
+    <div className="home-page">
+      <div className="logo-container">
+        <img
+          src="/logotipoAgenda.png"
+          alt="Logotipo de la agenda"
+          className="logo-home"
+        />
+        <span className="year-inside-logo">{currentYear}</span>
+      </div>
     </div>
   );
 }
 
 export default Inicio;
+
+
+

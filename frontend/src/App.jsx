@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import { Outlet } from "react-router-dom";
-import Navbar from "./componets/Navbar.jsx";
+import Navbar from "./components/Navbar.jsx";
 import Inicio from "./pages/Home.jsx";
-import Footer from "./componets/Footer.jsx";
+import Footer from "./components/Footer.jsx";
+import CalendarioPage from "./pages/CalendarioPage.jsx";
 
 function App() {
   return (
@@ -13,6 +13,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Inicio />} />
+        <Route path="/calendario" element={<CalendarioPage />} />
       </Routes>
       <Footer />
     </>
