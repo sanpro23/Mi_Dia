@@ -164,3 +164,60 @@ footer {
   cursor: pointer;
 }
 
+.day {
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-height: 80px;
+  cursor: pointer;
+  position: relative;
+}
+
+.day-number {
+  font-weight: bold;
+}
+
+.event {
+  margin-top: 5px;
+  padding: 3px 5px;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.delete-btn:hover {
+  color: black;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}

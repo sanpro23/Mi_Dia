@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 const links = [
   { to: "/", label: "INICIO" },
   { to: "/calendario", label: "CALENDARIO" },
-  { to: "/eventos", label: "EVENTOS" },
   { to: "/contacto", label: "CONTACTO" },
   { to: "/tareas", label: "TAREAS" },
   { to: "/notas", label: "NOTAS" },
