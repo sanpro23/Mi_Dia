@@ -4,7 +4,7 @@ body {
   background-color: #f0f0f0;
 }
 
-/*----------------*/
+/*-----------------------------------------------------------*/
 
 /*TITULO PRINCIPAL*/
 .mi-app h1 {
@@ -21,7 +21,7 @@ body {
   height: 100px;
 }
 
-/*----------------*/
+/*-----------------------------------------------------------*/
 
 /* NAVBAR */
 .navbar-container {
@@ -50,7 +50,7 @@ nav ul {
   border-radius: 10px;
 }
 
-/*----------------*/
+/*------------------------------------------------------------*/
 
 /* FOOTER */
 footer {
@@ -63,29 +63,29 @@ footer {
   margin-top: auto;
 }
 
-/*----------------*/
+/*-------------------------------------------------------------*/
 
 /* ============================
    🎨 ESTILOS BASE
    ============================ */
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    color: #333;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #333;
 }
 
 /* Contenedor general */
 .page-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem;
 }
 
 /* ============================
@@ -93,44 +93,29 @@ body {
    ============================ */
 
 .navbar {
-    background: #007bff;
-    padding: 1rem 2rem;
-    color: white;
+  background: #007bff;
+  padding: 1rem 2rem;
+  color: white;
 }
 
 .navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .navbar-logo img {
-    height: 50px;
-}
-
-/* Menú horizontal en escritorio */
-.nav-menu {
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
+  height: 50px;
 }
 
 .navbar-link {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .navbar-link:hover {
-    text-decoration: underline;
-}
-
-/* Botón hamburguesa (oculto en escritorio) */
-.navbar-toggle {
-    display: flex;
-    justify-content: end;
-    font-size: 2rem;
-    cursor: pointer;
+  text-decoration: underline;
 }
 
 /* ============================
@@ -138,19 +123,18 @@ body {
    ============================ */
 
 @media (max-width: 900px) {
+  .page-container {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
 
-    .page-container {
-        max-width: 90%;
-        padding: 1.5rem;
-    }
+  .navbar-logo img {
+    height: 45px;
+  }
 
-    .navbar-logo img {
-        height: 45px;
-    }
-
-    .nav-menu {
-        gap: 1rem;
-    }
+  .nav-menu {
+    gap: 1rem;
+  }
 }
 
 /* ============================
@@ -158,65 +142,37 @@ body {
    ============================ */
 
 @media (max-width: 600px) {
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
 
-    .navbar-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-    }
+  .navbar-item {
+    width: 100%;
+  }
 
-    /* Mostrar hamburguesa */
-    .navbar-toggle {
-        display: block;
-        font-size: 2rem;
-        cursor: pointer;
-        margin-left: auto; /* Esto lo pega al menú */
-    }
-
-    /* Ocultar menú por defecto */
-    .nav-menu {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        margin-top: 1rem;
-        gap: 1rem;
-    }
-
-    /* Mostrar menú cuando se active */
-    .nav-menu.show {
-        display: flex;
-    }
-
-    .navbar-item {
-        width: 100%;
-    }
-
-    .navbar-link {
-        display: block;
-        width: 100%;
-        padding: 0.7rem 0;
-        border-bottom: 1px solid rgba(255,255,255,0.3);
-    }
+  .navbar-link {
+    display: block;
+    width: 100%;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  }
 }
 
-    
-
-    /* Ajustes generales */
-    .page-container {
-        padding: 1rem;
-        margin: 0.5rem;
-    }
-
-    h1 {
-        font-size: 1.7rem;
-        text-align: center;
-    }
+/* Ajustes generales */
+.page-container {
+  padding: 1rem;
+  margin: 0.5rem;
 }
 
+h1 {
+  font-size: 1.7rem;
+  text-align: center;
+}
 
-
-/*----------------*/
+/*-----------------------------------------------------------*/
 
 /*PAGINA INICIO*/
 
@@ -253,23 +209,51 @@ body {
   pointer-events: none; /* evita clics sobre el texto */
 }
 
-/*----------------*/
+/*---------------------------------------------------------------*/
 
 /* PAGINA CALENDARIO*/
+
+/* contenedor principal */
 .calendar-page {
-  display: flex;
-  justify-content: center;
-  padding: 40px 0;
+  width: 900px;
+  margin: 30px auto;
+  font-family: "Inter", Arial, sans-serif;
+  color: #333;
 }
 
-/* Contenedor del calendario */
+/* botón exportar */
+.export-container {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.export-btn {
+  background: linear-gradient(135deg, #4285f4, #0b66c3);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.export-btn:hover {
+  background: linear-gradient(135deg, #5a95f7, #0d74e7);
+  transform: translateY(-2px);
+}
+
+/* calendario */
 .calendar {
-  max-width: 600px;
-  width: 90%;
-  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);
 }
 
-/* Cabecera */
+/* cabecera del calendario */
 .calendar-header {
   display: flex;
   justify-content: space-between;
@@ -278,92 +262,109 @@ body {
 }
 
 .calendar-header h2 {
-  margin: 0;
-  font-size: 24px;
+  font-size: 26px;
+  font-weight: 700;
 }
 
 .calendar-header button {
-  background-color: #ddd;
+  background: #eee;
   border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 18px;
+  transition: 0.2s;
+  font-weight: 600;
 }
 
-/* Grid */
+.calendar-header button:hover {
+  background: #ddd;
+}
+
+/* grid del calendario */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
 }
 
-.weekday {
-  font-weight: bold;
+/* nombres de los días */
+.day-name {
+  text-align: center;
+  font-weight: 700;
   padding: 10px 0;
-  background-color: #f0f0f0;
-  border-radius: 6px;
+  background: #f3f3f3;
+  border-radius: 8px;
 }
 
-.day,
+/* día vacío */
 .empty {
-  padding: 15px 0;
-  background-color: #fff;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+  height: 100px;
 }
 
-.day:hover {
-  background-color: #e6f7ff;
-  cursor: pointer;
-}
-
+/* día normal */
 .day {
-  padding: 10px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  min-height: 80px;
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 8px;
+  min-height: 110px;
   cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid #e5e5e5;
   position: relative;
 }
 
-.day-number {
-  font-weight: bold;
+.day:hover {
+  background: #eef4ff;
+  transform: translateY(-2px);
 }
 
+/* número del día */
+.day-number {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* evento */
 .event {
-  margin-top: 5px;
-  padding: 3px 5px;
-  border-radius: 4px;
+  background: #4285f4;
   color: white;
-  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  font-size: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-.delete-btn {
+/* botones dentro del evento */
+.event button {
   background: transparent;
   border: none;
-  color: white;
-  font-weight: bold;
   cursor: pointer;
-  margin-left: 6px;
+  color: white;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: 0.2s;
 }
 
-.delete-btn:hover {
-  color: black;
+.event button:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* Modal */
+/* modal */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -371,103 +372,186 @@ body {
 
 .modal-content {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
+  padding: 25px;
+  border-radius: 14px;
+  width: 350px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.2s ease-in-out;
 }
 
-/*----------------*/
+.modal-content h3 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.modal-content input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.modal-content input[type="color"] {
+  width: 100%;
+  height: 45px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.modal-content button:first-of-type {
+  background: #007bff;
+  color: white;
+}
+
+.modal-content button:first-of-type:hover {
+  background: #0066d6;
+}
+
+.modal-content button:last-of-type {
+  background: #ddd;
+}
+
+.modal-content button:last-of-type:hover {
+  background: #ccc;
+}
+
+/* animación modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.import-btn {
+  background: linear-gradient(135deg, #34a853, #0f7b32);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  transition: 0.2s;
+  display: inline-block;
+}
+
+.import-btn:hover {
+  background: linear-gradient(135deg, #4ccf6a, #12963d);
+  transform: translateY(-2px);
+}
+
+/*-----------------------------------------------------------------------------*/
 
 /* PAGINA DE CONTACTOS */
 
-/* Contenedor general */
+/* contenedor principal */
 .contactos-container {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 700px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #f9f9f9;
+  border-radius: 14px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);
   font-family: Arial, sans-serif;
 }
 
-/* Título */
+/* título */
 .contactos-container h1 {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 25px;
+  font-size: 28px;
   color: #333;
 }
 
-/* Formulario */
+/* formulario */
 .contactos-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 30px;
 }
 
-/* Cada campo */
-.contactos-form div {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Etiquetas */
 .contactos-form label {
   font-weight: bold;
-  margin-bottom: 0.3rem;
-  color: #444;
+  margin-bottom: 5px;
+  display: block;
 }
 
-/* Inputs y textarea */
 .contactos-form input,
 .contactos-form textarea {
-  padding: 0.7rem;
+  width: 100%;
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
+  border-radius: 8px;
 }
 
-.contactos-form input:focus,
-.contactos-form textarea:focus {
-  border-color: #007bff;
-  outline: none;
+.contactos-form textarea {
+  resize: vertical;
+  height: 80px;
 }
 
-/* Botón */
 .contactos-form button {
-  padding: 0.8rem;
+  grid-column: span 2;
+  padding: 12px;
   background: #007bff;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  font-size: 16px;
 }
 
 .contactos-form button:hover {
   background: #0056b3;
 }
 
-/* Lista de contactos */
+/* lista de contactos */
 .contactos-list {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 8px;
+  list-style: none;
+  padding: 0;
 }
 
-.contactos-list li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #ddd;
+.contacto-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
 }
 
-.contactos-list li:last-child {
-  border-bottom: none;
+.contacto-foto {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-/*----------------*/
+/*-----------------------------------------------------------------------------*/
 
 /*PAGINA DE TAREAS*/
 /* contenedor general */
@@ -581,3 +665,441 @@ body {
 .toggle-btn:hover {
   background: #222;
 }
+
+/*--------------------------------------------------------------------------------------*/
+
+/* PAGINA DE NOTAS */
+
+/* CONTENEDOR GENERAL */
+.page-notas {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: "Inter", sans-serif;
+  color: #222;
+}
+
+.page-notas h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* FORMULARIO */
+.page-notas input[type="text"],
+.page-notas textarea,
+.page-notas select {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  font-size: 15px;
+  background: #fafafa;
+  transition: 0.2s;
+}
+
+.page-notas input[type="text"]:focus,
+.page-notas textarea:focus,
+.page-notas select:focus {
+  border-color: #4285f4;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.25);
+}
+
+.page-notas textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+/* COLOR PICKER */
+.page-notas input[type="color"] {
+  width: 60px;
+  height: 40px;
+  padding: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 15px;
+}
+
+/* BOTONES */
+.page-notas button {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-right: 10px;
+}
+
+/* GUARDAR */
+.page-notas button:nth-of-type(1) {
+  background: #4285f4;
+  color: white;
+  box-shadow: 0 4px 10px rgba(66, 133, 244, 0.35);
+}
+
+.page-notas button:nth-of-type(1):hover {
+  background: #2f6fd6;
+}
+
+/* CANCELAR */
+.page-notas button[style] {
+  background: #777 !important;
+  color: white;
+}
+
+.page-notas button[style]:hover {
+  background: #555 !important;
+}
+
+/* EXPORTAR */
+.export-notas-btn {
+  background: linear-gradient(135deg, #34a853, #0f7b32);
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  margin-top: 10px;
+}
+
+.export-notas-btn:hover {
+  background: linear-gradient(135deg, #4ccf6a, #12963d);
+}
+
+/* BUSCADOR */
+.search-input {
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+
+/* GRID TIPO GOOGLE KEEP */
+.notas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+/* TARJETA */
+.nota-card {
+  padding: 16px;
+  border-radius: 14px;
+  min-height: 160px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.nota-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* TITULO */
+.nota-card h4 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* CONTENIDO */
+.nota-card p {
+  margin: 0;
+  font-size: 14px;
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+/* ETIQUETA */
+.tag {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* FOOTER */
+.nota-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.nota-footer small {
+  font-size: 11px;
+  color: #444;
+}
+
+/* BOTÓN ELIMINAR */
+.delete-btn {
+  background: transparent;
+  color: #b00020;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.delete-btn:hover {
+  background: rgba(176, 0, 32, 0.15);
+}
+
+/* PAGINACIÓN */
+.pagination {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.pagination button {
+  background: #eee;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin: 0 4px;
+  font-size: 14px;
+}
+
+.pagination button:hover {
+  background: #ddd;
+}
+
+.pagination button.active {
+  background: #4285f4;
+  color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  .page-notas {
+    padding: 0 12px;
+  }
+
+  .notas-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.notas-buttons {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+/* exportar */
+.export-notas-btn {
+  background: linear-gradient(135deg, #34a853, #0f7b32);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+  transition: 0.2s;
+}
+
+.export-notas-btn:hover {
+  background: linear-gradient(135deg, #4ccf6a, #12963d);
+  transform: translateY(-2px);
+}
+
+/* importar */
+.import-notas-btn {
+  background: linear-gradient(135deg, #4285f4, #0b66c3);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+  transition: 0.2s;
+  display: inline-block;
+}
+
+.import-notas-btn:hover {
+  background: linear-gradient(135deg, #5a95f7, #0d74e7);
+  transform: translateY(-2px);
+}
+
+
+/*------------------------------------------------------------------------------*/
+
+/*PAGINA  DE COMPRAS*/
+
+/* contenedor principal */
+.compras-page {
+  width: 650px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #f9f9f9;
+  border-radius: 14px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);
+  font-family: Arial, sans-serif;
+}
+
+/* título principal */
+.compras-page h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 26px;
+  color: #333;
+}
+
+/* formulario para añadir categoría */
+.agregar-categoria {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.agregar-categoria input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.agregar-categoria input:focus {
+  border-color: #007bff;
+}
+
+.agregar-categoria button {
+  padding: 12px 18px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+
+.agregar-categoria button:hover {
+  background: #1e7e34;
+}
+
+/* contenedor de categorías */
+.categorias-paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* tarjeta de categoría */
+.categoria-item {
+  background: white;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  min-width: 160px;
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.15s,
+    background 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+/* icono dentro de la tarjeta */
+.categoria-item .icono {
+  font-size: 24px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* botones dentro de la tarjeta */
+.categoria-item .acciones {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 6px;
+}
+
+.categoria-item .acciones button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.categoria-item .acciones button:hover {
+  background: #eee;
+}
+
+/* hover tarjeta */
+.categoria-item:hover {
+  background: #eef4ff;
+  transform: translateY(-3px);
+}
+
+/* paginación */
+.paginacion {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.paginacion button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border: none;
+  background: #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.paginacion button:hover {
+  background: #ccc;
+}
+
+.paginacion .active {
+  background: #007bff;
+  color: white;
+}
+
+/* contenedor de productos de una categoría */
+.productos-panel {
+  margin-top: 25px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+}
+
+.productos-panel h3 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: #333;
+}
+
+.productos-panel ul {
+  list-style: none;
+  padding: 0;
+}
+
+.productos-panel li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 17px;
+}
+
+/*---------------------------------------------------------------------*/

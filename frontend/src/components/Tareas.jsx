@@ -31,6 +31,7 @@ function Tareas() {
           value={tarea}
           onChange={(e) => setTarea(e.target.value)}
           placeholder="Agregar nueva tarea"
+          onKeyDown={(e) => e.key === "Enter" && agregarTarea(e)}
         />
         <button type="submit">Agregar</button>
       </form>
