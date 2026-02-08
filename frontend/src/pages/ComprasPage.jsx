@@ -3,7 +3,7 @@ import Compras from "../components/Compras";
 
 const ComprasPage = () => {
   return (
-    <div>
+    <div className="compras-page-wrapper">
       <h1>Compras</h1>
       <Compras />
     </div>

@@ -17,8 +17,17 @@ function Notas() {
 
   // cargar notas al iniciar
   useEffect(() => {
-    const savedNotas = JSON.parse(localStorage.getItem("notas")) || [];
-    setNotas(savedNotas);
+    const loadNotas = () => {
+      try {
+        const savedNotas = JSON.parse(localStorage.getItem("notas")) || [];
+        return savedNotas;
+      } catch (error) {
+        console.error("Error loading notas:", error);
+        return [];
+      }
+    };
+    
+    setNotas(loadNotas());
   }, []);
 
   // AUTOGUARDADO cada 3 segundos
@@ -131,7 +140,7 @@ function Notas() {
         localStorage.setItem("notas", JSON.stringify(merged));
 
         alert("Notas importadas correctamente.");
-      } catch (err) {
+      } catch {
         alert("Error al importar el archivo.");
       }
     };

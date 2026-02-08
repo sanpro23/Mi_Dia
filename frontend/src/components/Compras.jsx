@@ -18,14 +18,23 @@ function Compras() {
 
   // cargar datos
   useEffect(() => {
-    const guardadas = JSON.parse(localStorage.getItem("categorias")) || [
-      "Supermercado",
-    ];
-    const guardadosProductos =
-      JSON.parse(localStorage.getItem("productos")) || {};
-
-    setCategorias(guardadas);
-    setProductos(guardadosProductos);
+    const loadData = () => {
+      try {
+        const guardadas = JSON.parse(localStorage.getItem("categorias")) || [
+          "Supermercado",
+        ];
+        const guardadosProductos =
+          JSON.parse(localStorage.getItem("productos")) || {};
+        return { categorias: guardadas, productos: guardadosProductos };
+      } catch (error) {
+        console.error("Error loading compras data:", error);
+        return { categorias: ["Supermercado"], productos: {} };
+      }
+    };
+    
+    const { categorias, productos } = loadData();
+    setCategorias(categorias);
+    setProductos(productos);
   }, []);
 
   // guardar categorías

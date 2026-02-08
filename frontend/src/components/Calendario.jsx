@@ -35,8 +35,17 @@ function Calendario() {
 
   // cargar eventos desde localStorage
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("calendarEvents")) || {};
-    setEvents(saved);
+    const loadEvents = () => {
+      try {
+        const saved = JSON.parse(localStorage.getItem("calendarEvents")) || {};
+        return saved;
+      } catch (error) {
+        console.error("Error loading calendar events:", error);
+        return {};
+      }
+    };
+    
+    setEvents(loadEvents());
   }, []);
 
   // guardar eventos
