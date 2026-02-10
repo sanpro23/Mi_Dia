@@ -532,8 +532,6 @@ button, input, textarea, select {
 }
 
 .event {
-  background: var(--gradient-primary);
-  color: white;
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-lg);
   margin-bottom: var(--space-sm);
@@ -726,6 +724,7 @@ button, input, textarea, select {
   background: white;
   transition: all var(--transition-fast);
   font-weight: 500;
+  color: var(--gray-800);
 }
 
 .page-notas input[type="text"]:focus,
@@ -1074,6 +1073,7 @@ button, input, textarea, select {
   transition: all var(--transition-fast);
   box-shadow: var(--shadow-sm);
   border: 2px solid transparent;
+  color: var(--gray-800); 
 }
 
 .tarea-item:hover {
@@ -1516,7 +1516,7 @@ button, input, textarea, select {
   margin-bottom: var(--space-xl);
   font-size: 1.75rem;
   font-weight: 800;
-  color: var(--gray-900);
+  color: white;
   font-family: var(--font-display);
 }
 
@@ -1538,6 +1538,7 @@ button, input, textarea, select {
   transition: all var(--transition-fast);
   font-weight: 600;
   border: 2px solid transparent;
+  color: var(--gray-800);
 }
 
 .productos-panel li:hover {
