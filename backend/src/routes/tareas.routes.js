@@ -1,5 +1,5 @@
 import express from 'express';
-import Tarea from '../models/Tarea.js';
+import Tarea from '../model/Tarea.model.js';
   
 const router = express.Router();
 
@@ -17,32 +17,35 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const nueva = await Tarea.create({
-        usuario: req.user.id,
-        titulo: req.body.titulo,
-        descripcion: req.body.descripcion,
-        completada: false
+      usuario: req.user.id,
+      titulo: req.body.titulo,
+      descripcion: req.body.descripcion,
+      completada: false
+    });
+
     res.json(nueva);
+
   } catch (error) {
     res.status(500).json({ message: 'Error al crear la tarea', error });
   }
 });
 
-//Editar Tarea
+// Editar Tarea
 router.put('/:id', async (req, res) => {
-    try{
-        const actualizada = await Tarea.findByIdAndUpdate(
-            req.params.id,
-            {
-                titulo: req.body.titulo,
-                descripcion: req.body.descripcion,
-                completada: req.body.completada
-            },
-            { new: true }
-        );
-        res.json(actualizada);
-    } catch (error) {
-        res.status(500).json({ message: 'Error al actualizar la tarea', error });
-    }
+  try {
+    const actualizada = await Tarea.findByIdAndUpdate(
+      req.params.id,
+      {
+        titulo: req.body.titulo,
+        descripcion: req.body.descripcion,
+        completada: req.body.completada
+      },
+      { new: true }
+    );
+    res.json(actualizada);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar la tarea', error });
+  }
 });
 
 // Eliminar una tarea 

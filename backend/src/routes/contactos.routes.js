@@ -1,5 +1,5 @@
 import express from "express";
-import Contacto from "../models/Contacto.js";
+import Contacto from "../model/Contacto.model.js";
 
 const router = express.Router();
 
