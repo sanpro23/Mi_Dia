@@ -1,12 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useLocalStorage, useDebounce } from "../hooks";
+import { validateFile } from "../utils/validation";
 
 function Calendario() {
   const [date, setDate] = useState(new Date());
-  const [events, setEvents] = useState({});
+  const [events, setEvents] = useLocalStorage("CALENDAR_EVENTS", {});
+  const debouncedEvents = useDebounce(events, 1000);
   const [selectedDay, setSelectedDay] = useState(null);
   const [eventText, setEventText] = useState("");
   const [eventColor, setEventColor] = useState("#ff0000");
   const [editingEvent, setEditingEvent] = useState(null);
+  const [error, setError] = useState("");
 
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -33,25 +37,12 @@ function Calendario() {
     }
   }, []);
 
-  // cargar eventos desde localStorage
+  // guardar eventos con debounce
   useEffect(() => {
-    const loadEvents = () => {
-      try {
-        const saved = JSON.parse(localStorage.getItem("calendarEvents")) || {};
-        return saved;
-      } catch (error) {
-        console.error("Error loading calendar events:", error);
-        return {};
-      }
-    };
-    
-    setEvents(loadEvents());
-  }, []);
-
-  // guardar eventos
-  useEffect(() => {
-    localStorage.setItem("calendarEvents", JSON.stringify(events));
-  }, [events]);
+    if (debouncedEvents !== events) {
+      localStorage.setItem("calendarEvents", JSON.stringify(debouncedEvents));
+    }
+  }, [debouncedEvents, events]);
 
   // generar archivo ICS
   const exportICS = () => {
@@ -91,6 +82,12 @@ function Calendario() {
     const file = e.target.files[0];
     if (!file) return;
 
+    const validation = validateFile(file);
+    if (!validation.valid) {
+      setError(validation.error);
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = (event) => {
@@ -116,7 +113,7 @@ function Calendario() {
           const year = raw.substring(0, 4);
           const month = raw.substring(4, 6);
           const day = raw.substring(6, 8);
-          currentEvent.date = `${year}-${parseInt(month)}-${parseInt(day)}`;
+          currentEvent.date = `${year}-${month}-${day}`;
         }
 
         if (line === "END:VEVENT") {
@@ -136,28 +133,35 @@ function Calendario() {
       setEvents((prev) => {
         const merged = { ...prev };
         Object.keys(newEvents).forEach((day) => {
-          merged[day] = [...(merged[day] || []), ...newEvents[day]];
+          const existingEvents = merged[day] || [];
+          const importedEvents = newEvents[day];
+          merged[day] = [...existingEvents, ...importedEvents];
         });
         return merged;
       });
 
+      setError("");
       alert("Calendario importado correctamente");
+    };
+
+    reader.onerror = () => {
+      setError("Error al leer el archivo");
     };
 
     reader.readAsText(file);
   };
 
   // añadir evento
-  const addEvent = () => {
+  const addEvent = useCallback(() => {
     if (!eventText.trim()) return;
 
     const newEvent = {
       text: eventText,
       color: eventColor,
-      id: Date.now(),
+      id: Date.now() + Math.random(),
     };
 
-    setEvents((prev) => ({
+    setEvents(prev => ({
       ...prev,
       [selectedDay]: [...(prev[selectedDay] || []), newEvent],
     }));
@@ -170,7 +174,7 @@ function Calendario() {
 
     setEventText("");
     setSelectedDay(null);
-  };
+  }, [eventText, eventColor, selectedDay, setEvents]);
 
   // editar evento
   const saveEdit = () => {
@@ -190,14 +194,14 @@ function Calendario() {
   };
 
   // borrar evento
-  const deleteEvent = (dayKey, id) => {
+  const deleteEvent = useCallback((dayKey, id) => {
     setEvents((prev) => {
       const updated = { ...prev };
       updated[dayKey] = updated[dayKey].filter((ev) => ev.id !== id);
       if (updated[dayKey].length === 0) delete updated[dayKey];
       return updated;
     });
-  };
+  }, [setEvents]);
 
   // generar calendario mensual
   const firstDay = new Date(year, month, 1).getDay();
@@ -255,22 +259,24 @@ function Calendario() {
     <div className="calendar-page">
      
 
-      {/*IMPORTAR Y EXPORTAR CALENDARIO*/}
-      <div className="export-container">
-        <button className="export-btn" onClick={exportICS}>
-          📅 Exportar calendario completo
-        </button>
+       {/*IMPORTAR Y EXPORTAR CALENDARIO*/}
+       <div className="export-container">
+         <button className="export-btn" onClick={exportICS}>
+           📅 Exportar calendario completo
+         </button>
 
-        <label className="import-btn">
-          📥 Importar calendario
-          <input
-            type="file"
-            accept=".ics"
-            onChange={importICS}
-            style={{ display: "none" }}
-          />
-        </label>
-      </div>
+         <label className="import-btn">
+           📥 Importar calendario
+           <input
+             type="file"
+             accept=".ics"
+             onChange={importICS}
+             style={{ display: "none" }}
+           />
+         </label>
+       </div>
+       
+       {error && <div className="error-message">{error}</div>}
 
       {/* vista mensual */}
       <div className="calendar">
@@ -286,18 +292,18 @@ function Calendario() {
           </button>
         </div>
 
-        <div className="calendar-grid">
-          <div className="day-name">Lun</div>
-          <div className="day-name">Mar</div>
-          <div className="day-name">Mié</div>
-          <div className="day-name">Jue</div>
-          <div className="day-name">Vie</div>
-          <div className="day-name">Sáb</div>
-          <div className="day-name">Dom</div>
+       <div className="calendar-grid">
+         <div className="day-name">Lun</div>
+         <div className="day-name">Mar</div>
+         <div className="day-name">Mié</div>
+         <div className="day-name">Jue</div>
+         <div className="day-name">Vie</div>
+         <div className="day-name">Sáb</div>
+         <div className="day-name">Dom</div>
 
-          {days}
-        </div>
-      </div>
+         {days}
+       </div>
+     </div>
 
       {/* modal */}
       {selectedDay && (

@@ -1,0 +1,34 @@
+import { useState, useEffect } from 'react';
+import { DEBOUNCE_DELAY } from '../config/constants';
+
+export const useDebounce = (value, delay = DEBOUNCE_DELAY) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
+export const useDebouncedCallback = (callback, delay = DEBOUNCE_DELAY) => {
+  const [debouncedCallback, setDebouncedCallback] = useState(null);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedCallback(() => callback);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [callback, delay]);
+
+  return debouncedCallback;
+};

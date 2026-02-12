@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import LogoutButton from "./LogoutButton";
 
 const links = [
   { to: "/", label: "INICIO" },
@@ -10,6 +12,8 @@ const links = [
 ];
 
 const Navbar = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -17,15 +21,20 @@ const Navbar = () => {
           <img src="/ImagenPegada.png" alt="Descripción de la imagen" />
         </div>
 
-        <ul className="nav-menu">
-          {links.map((link) => (
-            <li key={link.to} className="navbar-item">
-              <Link to={link.to} className="navbar-link">
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {isAuthenticated() && (
+          <>
+            <ul className="nav-menu">
+              {links.map((link) => (
+                <li key={link.to} className="navbar-item">
+                  <Link to={link.to} className="navbar-link">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <LogoutButton />
+          </>
+        )}
       </div>
     </nav>
   );

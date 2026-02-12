@@ -1,0 +1,57 @@
+/* Error Message Styles */
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 10px;
+  border: 1px solid #fcc;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.error-boundary {
+  padding: 20px;
+  background-color: #fee;
+  border: 2px solid #c33;
+  border-radius: 8px;
+  margin: 20px;
+}
+
+.error-boundary h2 {
+  color: #c33;
+  margin-top: 0;
+}
+
+.error-boundary button {
+  background-color: #c33;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.error-boundary button:hover {
+  background-color: #a33;
+}
+
+.loading-message {
+  background-color: #e8f4f8;
+  color: #0066cc;
+  padding: 10px;
+  border: 1px solid #b3d9ff;
+  border-radius: 4px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* Form Validation */
+.form-field-error {
+  border: 2px solid #c33;
+  background-color: #fee;
+}
+
+.form-field-error:focus {
+  outline: 2px solid #c33;
+  outline-offset: 2px;
+}

@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useLocalStorage, useDebounce } from "../hooks";
+import { validateFile, validateJsonData, sanitizeImportedData } from "../utils/validation";
+import { PAGINATION } from "../config/constants";
 
 function Notas() {
   const [titulo, setTitulo] = useState("");
   const [content, setContent] = useState("");
   const [color, setColor] = useState("#fff8a6"); 
   const [tag, setTag] = useState("General");
-  const [notas, setNotas] = useState([]);
+  const [notas, setNotas] = useLocalStorage("NOTAS", []);
+  const debouncedNotas = useDebounce(notas, 1000);
   const [selectedId, setSelectedId] = useState(null);
 
   // BUSCADOR
@@ -13,36 +17,19 @@ function Notas() {
 
   // PAGINACIÓN
   const [currentPage, setCurrentPage] = useState(1);
-  const notasPorPagina = 6;
+  const [error, setError] = useState("");
 
-  // cargar notas al iniciar
+  // guardar con debounce
   useEffect(() => {
-    const loadNotas = () => {
-      try {
-        const savedNotas = JSON.parse(localStorage.getItem("notas")) || [];
-        return savedNotas;
-      } catch (error) {
-        console.error("Error loading notas:", error);
-        return [];
-      }
-    };
-    
-    setNotas(loadNotas());
-  }, []);
-
-  // AUTOGUARDADO cada 3 segundos
-  useEffect(() => {
-    const interval = setInterval(() => {
-      localStorage.setItem("notas", JSON.stringify(notas));
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [notas]);
+    if (debouncedNotas !== notas) {
+      localStorage.setItem("notas", JSON.stringify(debouncedNotas));
+    }
+  }, [debouncedNotas, notas]);
 
   // guardar o actualizar nota
-  const saveNota = () => {
+  const saveNota = useCallback(() => {
     if (!titulo.trim() || !content.trim()) {
-      alert("Por favor, completa el título y el contenido.");
+      setError("Por favor, completa el título y el contenido.");
       return;
     }
 
@@ -56,7 +43,7 @@ function Notas() {
       );
     } else {
       const newNota = {
-        id: Date.now(),
+        id: Date.now() + Math.random(),
         titulo,
         content,
         color,
@@ -67,14 +54,14 @@ function Notas() {
     }
 
     setNotas(updatedNotas);
-    localStorage.setItem("notas", JSON.stringify(updatedNotas));
 
     setTitulo("");
     setContent("");
     setColor("#fff8a6");
     setTag("General");
     setSelectedId(null);
-  };
+    setError("");
+  }, [titulo, content, color, tag, selectedId, notas, setNotas]);
 
   // abrir nota
   const openNota = (id) => {
@@ -124,25 +111,40 @@ function Notas() {
     const file = e.target.files[0];
     if (!file) return;
 
+    const validation = validateFile(file);
+    if (!validation.valid) {
+      setError(validation.error);
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = (event) => {
       try {
         const imported = JSON.parse(event.target.result);
 
-        if (!Array.isArray(imported)) {
-          alert("El archivo no contiene un formato válido de notas.");
+        const schemaValidation = validateJsonData(imported, {
+          required: ['titulo', 'content']
+        });
+        
+        if (!schemaValidation.valid) {
+          setError(schemaValidation.error);
           return;
         }
 
-        const merged = [...notas, ...imported];
+        const sanitizedImport = sanitizeImportedData(imported);
+        const merged = [...notas, ...sanitizedImport];
         setNotas(merged);
-        localStorage.setItem("notas", JSON.stringify(merged));
 
+        setError("");
         alert("Notas importadas correctamente.");
       } catch {
-        alert("Error al importar el archivo.");
+        setError("Error al importar el archivo: formato inválido");
       }
+    };
+
+    reader.onerror = () => {
+      setError("Error al leer el archivo");
     };
 
     reader.readAsText(file);
@@ -154,15 +156,17 @@ function Notas() {
   );
 
   // paginación
-  const indexUltima = currentPage * notasPorPagina;
-  const indexPrimera = indexUltima - notasPorPagina;
+  const indexUltima = currentPage * PAGINATION.NOTAS_POR_PAGINA;
+  const indexPrimera = indexUltima - PAGINATION.NOTAS_POR_PAGINA;
   const notasPagina = notasFiltradas.slice(indexPrimera, indexUltima);
 
-  const totalPaginas = Math.ceil(notasFiltradas.length / notasPorPagina);
+  const totalPaginas = Math.ceil(notasFiltradas.length / PAGINATION.NOTAS_POR_PAGINA);
 
   return (
     <div className="page-notas">
       <h1>NOTAS</h1>
+      
+      {error && <div className="error-message">{error}</div>}
 
       {/* FORMULARIO */}
       <input

@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import apiService from "../services/apiService";
+import { validateFile } from "../utils/validation";
 
 function Contactos() {
-  // Estado para almacenar los contactos cargados desde el backend
   const [contactos, setContactos] = useState([]);
-
-  //Estado del formulario
   const [formData, setFormData] = useState({
     nombre: "",
     apellidos: "",
@@ -17,42 +16,39 @@ function Contactos() {
     foto: "",
     notas: "",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // useEffect se ejecuta una vez al cargar el componente
-  // Aquí hacemos la petición GET al backend para obtener los contactos
   useEffect(() => {
-    fetch("http://localhost:8080/api/contactos")
-      .then((response) => response.json())
-      .then((data) => setContactos(data))
-      .catch((error) => console.error("Error al cargar los contactos:", error));
-  }, []); // El array vacío [] asegura que este efecto solo se ejecute una vez al montar el componente
+    loadContactos();
+  }, []);
 
-  // Función para manejar los cambios en el formulario
-  const handleChange = (e) => {
+  const loadContactos = async () => {
+    try {
+      const data = await apiService.getContactos();
+      setContactos(data);
+    } catch (error) {
+      console.error("Error al cargar los contactos:", error);
+      setError("Error al cargar los contactos");
+    }
+  };
+
+  const handleChange = useCallback((e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-  };
+  }, [formData]);
 
-  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
-      const response = await fetch("http://localhost:8080/api/contactos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error("Error al guardar el contacto");
-
-      const nuevo = await response.json();
-
+      const nuevo = await apiService.createContacto(formData);
       setContactos([...contactos, nuevo]);
 
-      // limpiar formulario
       setFormData({
         nombre: "",
         apellidos: "",
@@ -67,12 +63,23 @@ function Contactos() {
       });
     } catch (error) {
       console.error(error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  //Maneja el input de la foto
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    
+    if (!file) return;
+    
+    const validation = validateFile(file);
+    if (!validation.valid) {
+      setError(validation.error);
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.onloadend = () => {
@@ -80,11 +87,14 @@ function Contactos() {
         ...formData,
         foto: reader.result,
       });
+      setError("");
     };
 
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    reader.onerror = () => {
+      setError("Error al leer el archivo");
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -147,17 +157,29 @@ function Contactos() {
           />
         </div>
 
-        {/*campo ciudad*/}
-        <div>
-          <label>Ciudad</label>
-          <input
-            type="text"
-            name="ciudad"
-            value={formData.ciudad}
-            onChange={handleChange}
-            required
-          />
-        </div>
+         {/*campo ciudad*/}
+         <div>
+           <label>Ciudad</label>
+           <input
+             type="text"
+             name="ciudad"
+             value={formData.ciudad}
+             onChange={handleChange}
+             required
+           />
+         </div>
+
+         {/*campo pais*/}
+         <div>
+           <label>País</label>
+           <input
+             type="text"
+             name="pais"
+             value={formData.pais}
+             onChange={handleChange}
+             required
+           />
+         </div>
 
         {/*campo empresa*/}
         <div>
@@ -186,18 +208,22 @@ function Contactos() {
         {/*campo notas*/}
         <div>
           <label>Notas</label>
-          <textarea
-            name="notas"
-            value={formData.notas}
-            onChange={handleChange}
-            onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
-            required
-          />
+           <textarea
+             name="notas"
+             value={formData.notas}
+             onChange={handleChange}
+             required
+           />
         </div>
 
         <button type="submit">Agregar Contacto</button>
-      </form>
-      <ul className="contactos-list">
+       </form>
+       
+       {error && <div className="error-message">{error}</div>}
+       
+       {loading && <div className="loading-message">Guardando...</div>}
+       
+       <ul className="contactos-list">
         {contactos.map((contacto) => (
           <li key={contacto.id} className="contacto-item">
             {contacto.foto && (
