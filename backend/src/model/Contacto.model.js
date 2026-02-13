@@ -27,6 +27,10 @@ const contactoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    ciudad: {
+      type: String,
+      required: false,
+    },
     pais: {
       type: String,
       required: false,

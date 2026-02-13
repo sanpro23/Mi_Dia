@@ -207,7 +207,7 @@ class ApiService {
 
   // Autenticación
   async login(email, password) {
-    const response = await fetch(`${this.baseUrl}/api/users/login`, {
+    const response = await fetch(`${this.baseUrl}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -218,12 +218,12 @@ class ApiService {
   }
 
   async register(userData) {
-    const response = await fetch(`${this.baseUrl}/api/users`, {
+    const response = await fetch(`${this.baseUrl}/api/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify({ name: userData.username, email: userData.email, password: userData.password }),
     });
     return this.handleResponse(response);
   }

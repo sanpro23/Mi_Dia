@@ -23,6 +23,7 @@ router.post("/", async (req, res) => {
       telefono: req.body.telefono,
       email: req.body.email,
       ciudad: req.body.ciudad,
+      pais: req.body.pais,
       empresa: req.body.empresa,
       puesto: req.body.puesto,
       foto: req.body.foto, //base64
@@ -30,7 +31,7 @@ router.post("/", async (req, res) => {
     });
     res.status(201).json(nuevo);
   } catch (error) {
-    res.status(500).json({ message: "Error al crear el contacto", error });
+    res.status(500).json({ message: "Error al crear el contacto", error: error.message });
   }
 });
 

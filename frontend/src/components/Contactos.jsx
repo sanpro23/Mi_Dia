@@ -18,6 +18,8 @@ function Contactos() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [viewingContacto, setViewingContacto] = useState(null);
 
   useEffect(() => {
     loadContactos();
@@ -46,8 +48,14 @@ function Contactos() {
     setError("");
 
     try {
-      const nuevo = await apiService.createContacto(formData);
-      setContactos([...contactos, nuevo]);
+      if (editingId) {
+        const actualizado = await apiService.updateContacto(editingId, formData);
+        setContactos(contactos.map(c => c._id === editingId ? actualizado : c));
+        setEditingId(null);
+      } else {
+        const nuevo = await apiService.createContacto(formData);
+        setContactos([...contactos, nuevo]);
+      }
 
       setFormData({
         nombre: "",
@@ -67,6 +75,50 @@ function Contactos() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = (contacto) => {
+    setEditingId(contacto._id);
+    setFormData({
+      nombre: contacto.nombre,
+      apellidos: contacto.apellidos,
+      telefono: contacto.telefono,
+      email: contacto.email,
+      ciudad: contacto.ciudad || "",
+      pais: contacto.pais || "",
+      empresa: contacto.empresa || "",
+      puesto: contacto.puesto || "",
+      foto: contacto.foto || "",
+      notas: contacto.notas || "",
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm("¿Estás seguro de eliminar este contacto?")) return;
+    
+    try {
+      await apiService.deleteContacto(id);
+      setContactos(contactos.filter(c => c._id !== id));
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+    setFormData({
+      nombre: "",
+      apellidos: "",
+      telefono: "",
+      email: "",
+      ciudad: "",
+      pais: "",
+      empresa: "",
+      puesto: "",
+      foto: "",
+      notas: "",
+    });
   };
 
   const handleFileChange = (e) => {
@@ -97,19 +149,73 @@ function Contactos() {
     reader.readAsDataURL(file);
   };
 
+  const exportContactos = () => {
+    const dataStr = JSON.stringify(contactos, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "contactos.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importContactos = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const imported = JSON.parse(event.target.result);
+        if (!Array.isArray(imported)) {
+          setError("El archivo debe contener un array de contactos");
+          return;
+        }
+
+        for (const contacto of imported) {
+          await apiService.createContacto(contacto);
+        }
+        
+        loadContactos();
+        alert("Contactos importados correctamente");
+      } catch {
+        setError("Error al importar el archivo");
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <div className="contactos-container">
       <h1>Contactos</h1>
 
-      {/*FORMULARIO*/}
+      <div className="export-container">
+        <button className="export-btn" onClick={exportContactos}>
+          📥 Exportar Contactos
+        </button>
+        <label className="import-btn">
+          📤 Importar Contactos
+          <input
+            type="file"
+            accept=".json"
+            onChange={importContactos}
+            style={{ display: "none" }}
+          />
+        </label>
+      </div>
+
+      {error && <div className="error-message">{error}</div>}
+
       <form onSubmit={handleSubmit} className="contactos-form">
-        {/*campo foto*/}
+        {editingId && <h3>Editando Contacto</h3>}
+        
         <div>
           <label>Foto</label>
           <input type="file" accept="image/*" onChange={handleFileChange} />
+          {formData.foto && <img src={formData.foto} alt="preview" className="contacto-foto" style={{width: 50, height: 50, objectFit: 'cover'}} />}
         </div>
 
-        {/*campo nombre*/}
         <div>
           <label>Nombre</label>
           <input
@@ -121,7 +227,6 @@ function Contactos() {
           />
         </div>
 
-        {/*campo apellidos*/}
         <div>
           <label>Apellidos</label>
           <input
@@ -133,7 +238,6 @@ function Contactos() {
           />
         </div>
 
-        {/*campo telefono*/}
         <div>
           <label>Teléfono</label>
           <input
@@ -145,7 +249,6 @@ function Contactos() {
           />
         </div>
 
-        {/*campo email*/}
         <div>
           <label>Email</label>
           <input
@@ -153,35 +256,29 @@ function Contactos() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            required
           />
         </div>
 
-         {/*campo ciudad*/}
-         <div>
-           <label>Ciudad</label>
-           <input
-             type="text"
-             name="ciudad"
-             value={formData.ciudad}
-             onChange={handleChange}
-             required
-           />
-         </div>
+        <div>
+          <label>Ciudad</label>
+          <input
+            type="text"
+            name="ciudad"
+            value={formData.ciudad}
+            onChange={handleChange}
+          />
+        </div>
 
-         {/*campo pais*/}
-         <div>
-           <label>País</label>
-           <input
-             type="text"
-             name="pais"
-             value={formData.pais}
-             onChange={handleChange}
-             required
-           />
-         </div>
+        <div>
+          <label>País</label>
+          <input
+            type="text"
+            name="pais"
+            value={formData.pais}
+            onChange={handleChange}
+          />
+        </div>
 
-        {/*campo empresa*/}
         <div>
           <label>Empresa</label>
           <input
@@ -189,11 +286,9 @@ function Contactos() {
             name="empresa"
             value={formData.empresa}
             onChange={handleChange}
-            required
           />
         </div>
 
-        {/*campo puesto*/}
         <div>
           <label>Puesto</label>
           <input
@@ -201,44 +296,78 @@ function Contactos() {
             name="puesto"
             value={formData.puesto}
             onChange={handleChange}
-            required
           />
         </div>
 
-        {/*campo notas*/}
         <div>
           <label>Notas</label>
-           <textarea
-             name="notas"
-             value={formData.notas}
-             onChange={handleChange}
-             required
-           />
+          <textarea
+            name="notas"
+            value={formData.notas}
+            onChange={handleChange}
+          />
         </div>
 
-        <button type="submit">Agregar Contacto</button>
-       </form>
-       
-       {error && <div className="error-message">{error}</div>}
-       
-       {loading && <div className="loading-message">Guardando...</div>}
-       
-       <ul className="contactos-list">
+        <div className="form-buttons">
+          <button type="submit" disabled={loading}>
+            {loading ? "Guardando..." : editingId ? "Actualizar" : "Agregar Contacto"}
+          </button>
+          {editingId && (
+            <button type="button" onClick={handleCancel} className="cancel-btn">
+              Cancelar
+            </button>
+          )}
+        </div>
+      </form>
+
+      {loading && <div className="loading-message">Guardando...</div>}
+
+      <ul className="contactos-list">
         {contactos.map((contacto) => (
-          <li key={contacto.id} className="contacto-item">
+          <li key={contacto._id} className="contacto-item">
             {contacto.foto && (
               <img src={contacto.foto} alt="foto" className="contacto-foto" />
             )}
-            <div>
-              <strong>
-                {contacto.nombre} {contacto.apellidos}
-              </strong>
+            <div className="contacto-info">
+              <strong>{contacto.nombre} {contacto.apellidos}</strong>
               <br />
               {contacto.email}
+              {contacto.telefono && <span> | {contacto.telefono}</span>}
+              {contacto.empresa && <span> | {contacto.empresa}</span>}
+            </div>
+            <div className="contacto-actions">
+              <button onClick={() => setViewingContacto(contacto)} className="view-btn">
+                👁️
+              </button>
+              <button onClick={() => handleEdit(contacto)} className="edit-btn">
+                ✏️
+              </button>
+              <button onClick={() => handleDelete(contacto._id)} className="delete-btn">
+                🗑️
+              </button>
             </div>
           </li>
         ))}
       </ul>
+
+      {viewingContacto && (
+        <div className="modal" onClick={() => setViewingContacto(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>{viewingContacto.nombre} {viewingContacto.apellidos}</h3>
+            {viewingContacto.foto && (
+              <img src={viewingContacto.foto} alt="foto" className="contacto-foto" style={{width: 100, height: 100, objectFit: 'cover', borderRadius: '50%'}} />
+            )}
+            <p><strong>Email:</strong> {viewingContacto.email}</p>
+            <p><strong>Teléfono:</strong> {viewingContacto.telefono}</p>
+            <p><strong>Ciudad:</strong> {viewingContacto.ciudad}</p>
+            <p><strong>País:</strong> {viewingContacto.pais}</p>
+            <p><strong>Empresa:</strong> {viewingContacto.empresa}</p>
+            <p><strong>Puesto:</strong> {viewingContacto.puesto}</p>
+            <p><strong>Notas:</strong> {viewingContacto.notas}</p>
+            <button onClick={() => setViewingContacto(null)}>Cerrar</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

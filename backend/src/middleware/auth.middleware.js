@@ -1,19 +1,26 @@
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import User from '../model/User.model.js';
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
-    // Obtener el token del header Authorization
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
       return res.status(401).json({ message: 'No hay token, autorización denegada' });
     }
 
-    // Verificar el token
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key_temporal');
     
-    // Agregar el usuario decodificado a la request
-    req.user = decoded;
+    // Buscar el usuario en la base de datos para obtener el documento completo
+    const user = await User.findById(decoded.id).select('-password');
+    
+    if (!user) {
+      return res.status(401).json({ message: 'Usuario no encontrado' });
+    }
+    
+    // Guardar el usuario completo en la request
+    req.user = user;
     
     next();
   } catch (error) {
